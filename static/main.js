@@ -3,7 +3,7 @@ window.onload = async function () {
   var isEvenDivElement = document.querySelector("#isEven");
 
   const checkNumber = async (number) => {
-    var response = await (await fetch("/api/even", { method: "POST", body: number })).json();
+    var response = await (await fetch(`/api/even/${number}`)).json();
     isEvenDivElement.innerHTML = JSON.stringify(response);
   };
 

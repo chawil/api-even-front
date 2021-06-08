@@ -3,49 +3,44 @@ package main
 import (
 	"embed"
 	_ "embed"
-	"encoding/json"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 //go:embed static
-var static embed.FS
+var staticEmbed embed.FS
 
 func main() {
-	fsys, err := fs.Sub(static, "static")
+	fsys, err := fs.Sub(staticEmbed, "static")
 	if err != nil {
 		log.Fatalln(err)
 	}
-	http.Handle("/", http.FileServer(http.FS(fsys)))
 
-	http.HandleFunc("/api/even", func(response http.ResponseWriter, req *http.Request) {
-		defer (func(start time.Time) { log.Println("/api/even took", time.Since(start), "to respond") })(time.Now())
-		body, err := ioutil.ReadAll(req.Body)
+	r := gin.Default()
+
+	r.StaticFS("/home", http.FS(fsys))
+
+	r.GET("/", func(c *gin.Context) { c.Redirect(http.StatusTemporaryRedirect, "/home") })
+
+	r.GET("/api/even/:number", func(c *gin.Context) {
+		result, err := strconv.Atoi(string(c.Param("number")))
 		if err != nil {
 			log.Println(err)
 		}
-		result, err := strconv.Atoi(string(body))
-		if err != nil {
-			log.Println(err)
-		}
 
-		err = json.NewEncoder(response).Encode(struct {
+		c.JSON(http.StatusOK, struct {
 			Result int       `json:"result"`
 			IsEven bool      `json:"isEven"`
 			Date   time.Time `json:"date"`
 		}{Result: result, Date: time.Now().UTC()})
-
-		if err != nil {
-			log.Println(err)
-		}
 	})
 
-	log.Println("Serving on http://localhost:8888/")
-
-	err = http.ListenAndServe(":8888", nil)
+	log.Println("Serving on http://localhost:8080/")
+	err = r.Run()
 	log.Fatalln(err)
 }
