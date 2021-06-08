@@ -23,6 +23,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.FS(fsys)))
 
 	http.HandleFunc("/api/even", func(response http.ResponseWriter, req *http.Request) {
+		defer (func(start time.Time) { log.Println("/api/even took", time.Since(start), "to respond") })(time.Now())
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			log.Println(err)
