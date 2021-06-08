@@ -33,9 +33,9 @@ func main() {
 		}
 
 		err = json.NewEncoder(response).Encode(struct {
-			Result  int       `json:"result"`
-			IsEvent bool      `json:"isEvent"`
-			Date    time.Time `json:"date"`
+			Result int       `json:"result"`
+			IsEven bool      `json:"isEven"`
+			Date   time.Time `json:"date"`
 		}{Result: result, Date: time.Now().UTC()})
 
 		if err != nil {
