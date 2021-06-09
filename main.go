@@ -35,7 +35,7 @@ func main() {
 
 		c.JSON(http.StatusOK, struct {
 			Result int       `json:"result"`
-			IsEven bool      `json:"isEven"`
+			IsEven bool      `json:"isEven"` // TODO-charles: Get this value from backend API, env var URL
 			Date   time.Time `json:"date"`
 		}{Result: result, Date: time.Now().UTC()})
 	})
