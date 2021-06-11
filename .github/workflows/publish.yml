@@ -47,9 +47,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: |
-            docker.pkg.github.com/${{ github.repository }}/even-web:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/even-web:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: TAG=${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           # TODO: switch to type=gha once available:
           # * pending PR: https://github.com/moby/buildkit/pull/1974
