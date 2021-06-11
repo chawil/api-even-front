@@ -30,8 +30,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          cache-from: type=gha
-          cache-to: type=gha
+          cache-from: type=registry,ref=user/app:latest
+          cache-to: type=inline
           tags: |
             docker.pkg.github.com/${{ github.repository }}/even-web:${{ github.sha }}
             docker.pkg.github.com/${{ github.repository }}/even-web:latest
