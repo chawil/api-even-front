@@ -30,4 +30,3 @@ jobs:
           push: true
           tags: |
             docker.pkg.github.com/${{ github.repository }}/even-web:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/even-web:${{ github.ref }}
