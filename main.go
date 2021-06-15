@@ -53,10 +53,11 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, struct {
-			Result int       `json:"result"`
-			IsEven bool      `json:"isEven"`
-			Date   time.Time `json:"date"`
-		}{Result: result, Date: time.Now().UTC(), IsEven: backendResult.IsEven})
+			Result    int       `json:"result"`
+			IsEven    bool      `json:"isEven"`
+			Date      time.Time `json:"date"`
+			Namespace string    `json:"namespace"`
+		}{Result: result, Date: time.Now().UTC(), IsEven: backendResult.IsEven, Namespace: os.Getenv("NAMESPACE")})
 	})
 
 	log.Println("Serving on http://localhost:8080/")
